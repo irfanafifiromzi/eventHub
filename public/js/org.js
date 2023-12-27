@@ -1,13 +1,16 @@
-var btnContainer = document.getElementById("activenavbar");
+$(document).ready(function () {
+  // Get the current URL path
+  var path = window.location.pathname;
+  console.log('Current path:', path);
 
-// Get all buttons with class="btn" inside the container
-var btns = btnContainer.getElementsByClassName("btn btn-outline-dark");
+  // Find the corresponding navbar link and add the 'active' class
+  $('#activenavbar a').each(function () {
+      var href = $(this).attr('href');
+      console.log('Current href:', href);
 
-// Loop through the buttons and add the active class to the current/clicked button
-for (var i = 0; i < btns.length; i++) {
-  btns[i].addEventListener("click", function() {
-    var current = document.getElementsByClassName("active");
-    current[0].className = current[0].className.replace(" active", "");
-    this.className += " active";
+      // Correct the if condition by removing the extra parenthesis
+      if (('http://127.0.0.1:8000' + path) === href) {
+          $(this).addClass('active');
+      }
   });
-}
+});

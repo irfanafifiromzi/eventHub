@@ -10,7 +10,7 @@ use App\Models\User;
 class AuthController extends Controller
 {
     public function login(){
-        return view('login');
+        return view('/auth/login');
     }
 
     public function loginProcess(Request $request){
@@ -18,11 +18,11 @@ class AuthController extends Controller
             return redirect()->intended('/'); /*redirect users to the page they initially attempted to access before being prompted to log in*/ 
         }
 
-        return \redirect('login');
+        return \redirect('/login');
     }
 
     public function signup(){
-        return view('signup');
+        return view('/auth/signup');
     }
 
     public function signupUser(Request $request){

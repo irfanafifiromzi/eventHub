@@ -30,7 +30,10 @@ Route::post('/signupUser', [AuthController::class, 'signupUser'])->name('signupU
 Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
 
 /*Organization*/
-Route::get('/organization', [OrganizationController::class, 'index'])->name('organizationhome');
+Route::get('/organization', [OrganizationController::class, 'organization'])->name('organizationhome');
+Route::middleware(['auth'])->group(function () {
+    Route::get('/organization/manageEvent', [OrganizationController::class, 'showEvent'])->name('organization.showEvent');
+});
 
 /*Event Description page*/
 Route::get('/events/{events}', [EventsController::class, 'show'])->name('events.show');

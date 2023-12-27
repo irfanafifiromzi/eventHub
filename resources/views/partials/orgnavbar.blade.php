@@ -36,7 +36,7 @@
 
 <div id="activenavbar">
  <!-- <a href="#" class="w3-bar-item w3-button"><i class="fa fa-home"></i></a> -->
-  <a href="#" class="btn btn-outline-dark active">Home</a> 
-  <a href="#" class="btn btn-outline-dark">Events</a> 
+  <a href="{{ route('organizationhome') }}" class="btn btn-outline-dark">Home</a> 
+  <a href="{{ route('organization.showEvent') }}" class="btn btn-outline-dark">Events</a> 
   <a href="#" class="btn btn-outline-dark">Report</a> 
 </div>
