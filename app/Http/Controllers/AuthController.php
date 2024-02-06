@@ -12,12 +12,17 @@ class AuthController extends Controller
     public function login(){
         return view('/auth/login');
     }
-
+    
     public function loginProcess(Request $request){
+        $credentials = $request->only('email', 'password');
+
+        if (Auth::guard('admins')->attempt($credentials)) {
+            return redirect()->intended('/admin');
+        }
         if(Auth::attempt($request->only('email','password'))){
             return redirect()->intended('/'); /*redirect users to the page they initially attempted to access before being prompted to log in*/ 
         }
-
+        //$dd($credentials);
         return \redirect('/login');
     }
 

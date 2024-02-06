@@ -35,5 +35,16 @@ class UsersSeeder extends Seeder
             'created_at' => now(),
             'updated_at' => now(),
         ]);
+
+        DB::table('users')->insert([
+            'f_name' => 'admin',
+            'l_name' => '1',
+            'email' => 'admin@gmail.com',
+            'email_verified_at' => now(),
+            'password' => bcrypt('abc123'),
+            'remember_token' => Str::random(60),
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
     }
 }
