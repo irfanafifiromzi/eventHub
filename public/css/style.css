@@ -1,0 +1,101 @@
+
+.eventImage{
+    width: 60px;
+    height: 60px;
+}
+
+.upcomingImage{
+    width: 90px;
+    height: 90px;
+}
+
+.themepic{
+    max-width: 1200px;
+    padding-left: 100px;
+}
+
+.eventButton{
+    bottom: 40px;
+    width: 110px;
+    margin-right: 20px;
+    text-align: center;
+}
+
+.eventButton a{
+    position: relative;
+    margin-top: 30px;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    width:110px;
+    height: 110px;
+    background: transparent;
+    border: 2px solid #081b29;
+    border-radius: 50% ;
+    font-size: 20px;
+    color: #081b29;
+    text-decoration: none;
+    z-index: 1;
+    overflow: hidden;
+    transition: .5s;
+}
+
+.eventButton a::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 0;
+    height: 100%;
+    background-color: #081b29;
+    filter: brightness(0.9) invert(.7) sepia(.5) hue-rotate(100deg) saturate(200%);
+    z-index: -1;
+    transition: .5s;
+}
+
+.eventButton a:hover::before {
+    width: 100%
+}
+
+.allEvent{
+    display: inline-flex;
+}
+
+.upcomingEvent{
+    border: 2px solid #081b29;
+    border-radius: 10%;
+    width:200px;
+    min-height: 250px;
+    margin-right: 10px;
+    display: inline-block;
+    text-align: center;
+}
+
+.navbar-brand{
+    font-weight: bold;
+}
+
+.eventInfo{
+    padding-left: 100px;
+    display: inline-flex;
+}
+
+.eventInfo2{
+    width: 600px;
+}
+
+.ticket{
+    height: 200px;
+    width: 300px;
+    margin-top: 50px;
+    padding-top: 50px;
+    text-align: center;
+    border: #081b29 0.1em solid;
+    border-radius: 0.2em;
+}
+
+/*organization*/
+
+#activenavbar{
+    padding: 5px;
+}
