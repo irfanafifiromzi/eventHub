@@ -4,6 +4,7 @@ use App\Http\Controllers\EventsController;
 use App\Http\Controllers\StripeController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\OrganizationController;
+use App\Http\Controllers\AdminController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -77,3 +78,48 @@ Route::get('/artsEvent', function () {
     return view('artsEvent');
 });
 
+/*****************************************************
+Admin
+******************************************************/
+Route::get('/admin', [AdminController::class, 'dashboard']);
+
+/**Manage Events**************************/
+Route::get('/events', [AdminController::class, 'eventindex']);
+
+Route::get('/createevent', [AdminController::class, 'createevent']); 
+Route::post('/storeevent', [AdminController::class, 'storeevent']); 
+
+Route::get('editevent/{id}', [AdminController::class, 'editevent']);
+
+Route::put('updateevent/{id}', [AdminController::class, 'updateevent']);
+
+Route::delete('deleteevent/{id}', [AdminController::class, 'destroyevent']);
+
+/**Manage Requests**************************/
+Route::get('/requests', [AdminController::class, 'requests']);
+
+Route::any('details/{id}', [AdminController::class, 'details']);
+
+Route::post('update-status/{id}/{action}', [AdminController::class, 'updateStatus']);
+
+/*Sponsorships*****************************/ 
+Route::get('/sponsors', [AdminController::class, 'sponsorIndex']);
+
+Route::get('/createsponsor', [AdminController::class, 'createsponsor']);
+Route::post('/storesponsor', [AdminController::class, 'storesponsor']);
+
+Route::get('editsponsor/{id}', [AdminController::class, 'editsponsor']);
+Route::put('updatesponsor/{id}', [AdminController::class, 'updatesponsor']);
+
+Route::delete('deletesponsor/{id}', [AdminController::class, 'destroysponsor']);
+
+/*Report*************************************/
+Route::get('report/{id}', [AdminController::class, 'report']);
+
+/*Manage Accounts******************************************/
+Route::get('/accounts', [AdminController::class, 'userIndex']);
+
+Route::get('/createuser', [AdminController::class, 'createuser']);
+Route::post('/storeuser', [AdminController::class, 'storeuser']);
+
+Route::delete('deleteuser/{id}', [AdminController::class, 'destroyuser']);
