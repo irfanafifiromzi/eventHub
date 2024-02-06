@@ -60,9 +60,11 @@
         </div>
         <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-            <a href="/deleteEvent/{{ $event->id }}">
+            @if(isset($event))
+                <a href="/deleteEvent/{{ $event->id }}">
                     <button type="button" class="btn btn-danger mb-1" style="width: 80px;">Delete</button>
-            </a>
+                </a>
+            @endif
         </div>
         </div>
     </div>
