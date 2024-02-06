@@ -20,10 +20,23 @@
                 <br> Contacts : {{ $organizer->email }}
             </p>
         </div>
-        <div class="ticket">
-            <h5>Ticket Price</h5>
-            <p>RM {{ $events->eventPrice }}</p>
-            <a href="#">Get tickets</a>
+
+        <div class="card" id="ticket" style="width: 18rem;">
+            <div class="card-body">
+                <h5 class="card-title">Single Pax</h5>
+                <p class="card-text">RM {{ $events->eventPrice }}</p>
+                
+                <form action="/session" method="POST">
+                    <label for="quantity">Quantity:</label>
+                    <input type="hidden" name="_token" value="{{csrf_token()}}">
+                    <input type="number" id="quantity" name="quantity" min="1" max="{{ $events->eventCapacity }}" value="1">
+                    <input type="hidden" name="eventPrice" value="{{ $events->eventPrice }}">
+                    <input type="hidden" name="eventName" value="{{ $events->eventName }}">
+                    <input type="hidden" name="eventId" value="{{ $events->id }}">
+                    <br><br><button type="submit" class="btn btn-primary">Get Tickets</button>
+                </form>
+            </div>
+            
         </div>
 
     </div>

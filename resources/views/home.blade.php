@@ -21,16 +21,23 @@
         </div>
     </div>
 
+
     <h3>Upcoming Events</h3> <br>
     
+    <div class="d-flex flex-row">
         @foreach ($data as $event)
-        <div class="upcomingEvent">
-            <img class="upcomingImage" src="img/event.png" alt="event">
-            <h5>{{ $event->eventName }}</h5>
-            <h6>{{ $event->eventStartDate->format('F j, Y') }}</h6><br>
-            <h6>Rm {{ $event->eventPrice }}</h6>
-            <a href="{{ route('events.show', ['events' => $event->id]) }}">More</a>
-        </div>
+            <div class="card" style="width: 18rem; margin-right: 10px;">
+                <img src="img/eventoffuture.jpg" class="card-img-top" alt="event">
+                <div class="card-body">
+                    <h5 class="card-title">{{ $event->eventName }}</h5>
+                    <p class="card-text">{{ $event->eventStartDate->format('F j, Y') }}</p>
+                    <p>Rm {{ $event->eventPrice }}</p>
+                    <a href="{{ route('events.show', ['events' => $event->id]) }}" class="btn btn-primary">More</a>
+                </div>
+            </div>
         @endforeach
+    </div>
+
+
 
 @endsection        

@@ -6,6 +6,7 @@ use App\Models\Events;
 use App\Models\User;
 use App\Http\Requests\StoreEventsRequest;
 use App\Http\Requests\UpdateEventsRequest;
+use Illuminate\Http\Request;
 
 class EventsController extends Controller
 {
@@ -16,6 +17,16 @@ class EventsController extends Controller
     {
         $data = Events::all();
         return view('home', compact('data'));
+    }
+
+    public function search(Request $request)
+    {
+        $keyword = $request->input('keyword');
+
+        // Perform the search using your model
+        $results = Events::where('eventName', 'LIKE', '%' . $keyword . '%')->get();
+
+        return view('searchResult', ['results' => $results]);
     }
 
     /**
@@ -41,6 +52,7 @@ class EventsController extends Controller
     {
         $eventDetails = Events::where('id', $events->id)->first();
         $userDetails = User::where('email', $eventDetails->email)->first();
+        //dd($eventDetails);
         return view('show', ['events' => $eventDetails], ['organizer' => $userDetails]);
     }
     
@@ -67,4 +79,23 @@ class EventsController extends Controller
     {
         //
     }
+
+    /*
+    public function likeEvent(Request $request, $eventId)
+    {
+        $user = auth()->user();
+        $event = Events::findOrFail($eventId);
+
+        // Check if the user already liked the event
+        if ($user->hasLikedEvent($event)) {
+            // Unlike the event
+            $user->eventLikes()->detach($event);
+            return response()->json(['liked' => false]);
+        } else {
+            // Like the event
+            $user->eventLikes()->attach($event);
+            return response()->json(['liked' => true]);
+        }
+    }
+    */
 }
