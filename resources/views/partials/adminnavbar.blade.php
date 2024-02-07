@@ -18,6 +18,9 @@
             <li class="nav-item {{ request()->is('accounts*') ? 'active' : '' }}">
                 <a class="nav-link" href="/accounts">Accounts</a>
             </li>
+            <li class="nav-item {{ request()->is('accounts*') ? 'active' : '' }}">
+                <a class="nav-link" href="/logout">Log out</a>
+            </li>
         </ul>
     </div>
 </div>

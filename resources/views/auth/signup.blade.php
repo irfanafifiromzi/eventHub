@@ -8,7 +8,7 @@
 </head>
 <body>
     <br><br><br>
-    <a href="/" class="title">Event Manager</a>
+    <a href="/" class="title">EventHub</a>
     <h3>Create an account</h3>
     <br>
 <form action="/signupUser" method="post">

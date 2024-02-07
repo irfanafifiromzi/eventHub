@@ -35,7 +35,7 @@
                 <a class="nav-link" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"><img src="{{ asset('img/user.png') }}" alt="user" width="20"> {{ Auth::user()->email }} <img src="{{ asset('img/down-arrow.png') }}" alt="downarrow" width="20"></a>
                 <ul class="dropdown-menu">
                     <li><a class="dropdown-item" href="/organization">Manage my events</a></li>
-                    <li><a class="dropdown-item" href="/logout">Log out</a>
+                    <li><a class="dropdown-item" href="/logout">Log out</a></li>
                 </ul>
             </li>    
             @endguest
