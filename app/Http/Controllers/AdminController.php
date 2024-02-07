@@ -51,12 +51,12 @@ class AdminController extends Controller
         $data = $query->get();
 
         // Pass the filtered data and search term to the view
-        return view('manageEvent', compact('data', 'search'));
+        return view('admin/manageEvent', compact('data', 'search'));
     }
 
     public function createevent()
     {
-        return view('addEvent');
+        return view('admin/addEvent');
     }
 
     public function storeevent(Request $request)
@@ -83,7 +83,7 @@ class AdminController extends Controller
     public function editevent($id){
         $event = Events::find($id);
 
-        return view('editevent', compact('event'));
+        return view('admin/editevent', compact('event'));
     }
 
     public function updateevent(Request $request, $id)
@@ -117,7 +117,7 @@ class AdminController extends Controller
     public function dashboard(){
         $count = Events::where('eventStatus', '=', 'Pending')->count();
 
-        return view('dashboard')->with('count', $count);
+        return view('admin/dashboard')->with('count', $count);
     }
 
     //Get all event requests
@@ -133,13 +133,13 @@ class AdminController extends Controller
         }
 
         $data = $query->get();
-        return view('eventRequests', compact('data', 'search'));
+        return view('admin/eventRequests', compact('data', 'search'));
     }
 
     public function details($id){
         $events = Events::find($id);
 
-        return view('eventDetails', compact('events'));
+        return view('admin/eventDetails', compact('events'));
     }
 
     public function updateStatus(Request $request, $id, $action)
@@ -181,12 +181,12 @@ class AdminController extends Controller
         $data = $query->get();
 
         // Pass the filtered data and search term to the view
-        return view('viewAccounts', compact('data', 'search'));
+        return view('admin/viewAccounts', compact('data', 'search'));
     }
 
     public function createuser()
     {
-        return view('addUser');
+        return view('admin/addUser');
     }
 
     public function storeuser(Request $request)
@@ -227,12 +227,12 @@ class AdminController extends Controller
 
         $data = $query->get();
 
-        return view('viewSponsors', compact('data', 'search') );
+        return view('admin/viewSponsors', compact('data', 'search') );
     }
 
     public function createsponsor()
     {
-        return view('addSponsor');
+        return view('admin/addSponsor');
     }
 
     public function storesponsor(Request $request)
@@ -251,7 +251,7 @@ class AdminController extends Controller
     public function editsponsor($id){
         $sponsor = Sponsorships::find($id);
 
-        return view('editsponsor', compact('sponsor'));
+        return view('admin/editsponsor', compact('sponsor'));
     }
 
     public function updatesponsor(Request $request, $id)
