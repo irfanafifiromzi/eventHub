@@ -5,7 +5,11 @@ use App\Http\Controllers\StripeController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\OrganizationController;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\StripeWebhookController;
+use App\Models\Payment;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Http\Request;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -17,6 +21,11 @@ use Illuminate\Support\Facades\Route;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
+
+
+/*************************************************************
+/*                         User                             */
+/********************************************************** */
 
 /*Home*/ 
 Route::get('/', [EventsController::class, 'index'])->name('home');
@@ -34,15 +43,75 @@ Route::get('/search', [EventsController::class, 'search'])->name('search');
 /*Event Description page*/
 Route::get('/events/{events}', [EventsController::class, 'show'])->name('events.show');
 
+/*Log out*/
+Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
+
+/* Liked */
+//Route::post('/like/event/{event}', [EventsController::class, 'likeEvent'])->name('like.event');
+
+Route::get('/musicEvent', function () {
+    return view('musicEvent', [
+        "eventName" => "HausBoom Concert",
+        "date" => "2-06-2024",
+    ]);
+});
+
+Route::get('/artsEvent', function () {
+    return view('artsEvent');
+});
+
+/*************************************************************
+/*                         Payment                           */
+/********************************************************** */
+
 /*Payment gateway*/
 Route::post('/session', [StripeController::class, 'session'])->name('session')->middleware('auth');
 Route::get('/success', [StripeController::class, 'success'])->name('success');
 
+Route::post('webhook', function(Request $request) {
 
-/*Log out*/
-Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
+    // Log the incoming webhook payload
+    Log::info('Webhook payload: ' . json_encode($request->all()));
 
-/*Organization*/
+    // Extract necessary data from the webhook payload
+    $payload = json_decode($request->getContent(), true);
+
+    // Check if $payload contains the necessary keys
+    if (isset($payload['data']['object'])) {
+        // Access the nested object containing payment data
+        $paymentData = $payload['data']['object'];
+
+        // Assuming the payment data contains 'id', 'amount', 'currency', and 'status' fields
+        $stripeId = $paymentData['id'] ?? null;
+        $amount = $paymentData['amount'] ?? null;
+        $currency = $paymentData['currency'] ?? null;
+        $status = $paymentData['status'] ?? null;
+
+        //get real amount
+        $realamount = $amount * 0.01;
+
+        // Insert the data into the payments table
+        $payment = new Payment();
+        $payment->stripe_id = $stripeId;
+        $payment->amount = $realamount;
+        $payment->currency = $currency;
+        $payment->status = $status;
+        $payment->save();
+
+        // Optionally, you can return a response
+        return response()->json(['message' => 'Payment data received and saved successfully']);
+    } else {
+        // Handle the case where the necessary keys are not found
+        return response()->json(['error' => 'Invalid webhook payload'], 400);
+    }
+
+});
+
+
+
+/*************************************************************
+/*                         Organization                     */
+/********************************************************** */
 Route::get('/organization', [OrganizationController::class, 'organization'])->name('organizationhome');
 Route::middleware(['auth'])->group(function () {
     Route::get('/organization/manageEvent', [OrganizationController::class, 'showEvent'])->name('organization.showEvent');
@@ -61,25 +130,9 @@ Route::post('/updateEvent/{id}', [OrganizationController::class, 'updateEvent'])
 /* Delete Event */
 Route::get('/deleteEvent/{id}', [OrganizationController::class, 'deleteEvent'])->name('organization.deleteEvent');
 
-/* Liked */
-//Route::post('/like/event/{event}', [EventsController::class, 'likeEvent'])->name('like.event');
-
-
-
-
-Route::get('/musicEvent', function () {
-    return view('musicEvent', [
-        "eventName" => "HausBoom Concert",
-        "date" => "2-06-2024",
-    ]);
-});
-
-Route::get('/artsEvent', function () {
-    return view('artsEvent');
-});
 
 /*****************************************************
-Admin
+                          Admin
 ******************************************************/
 Route::get('/admin', [AdminController::class, 'dashboard']);
 
