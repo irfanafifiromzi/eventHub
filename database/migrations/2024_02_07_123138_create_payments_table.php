@@ -16,10 +16,13 @@ class CreatePaymentsTable extends Migration
         Schema::create('payments', function (Blueprint $table) {
             $table->id();
             $table->string('stripe_id');
+            //$table->string('email'); 
             $table->float('amount');
             $table->string('currency');
             $table->string('status');
             $table->timestamps();
+
+            //$table->foreign('email')->references('email')->on('users')->onDelete('cascade');
         });
     }
 

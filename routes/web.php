@@ -68,44 +68,7 @@ Route::get('/artsEvent', function () {
 Route::post('/session', [StripeController::class, 'session'])->name('session')->middleware('auth');
 Route::get('/success', [StripeController::class, 'success'])->name('success');
 
-Route::post('webhook', function(Request $request) {
-
-    // Log the incoming webhook payload
-    Log::info('Webhook payload: ' . json_encode($request->all()));
-
-    // Extract necessary data from the webhook payload
-    $payload = json_decode($request->getContent(), true);
-
-    // Check if $payload contains the necessary keys
-    if (isset($payload['data']['object'])) {
-        // Access the nested object containing payment data
-        $paymentData = $payload['data']['object'];
-
-        // Assuming the payment data contains 'id', 'amount', 'currency', and 'status' fields
-        $stripeId = $paymentData['id'] ?? null;
-        $amount = $paymentData['amount'] ?? null;
-        $currency = $paymentData['currency'] ?? null;
-        $status = $paymentData['status'] ?? null;
-
-        //get real amount
-        $realamount = $amount * 0.01;
-
-        // Insert the data into the payments table
-        $payment = new Payment();
-        $payment->stripe_id = $stripeId;
-        $payment->amount = $realamount;
-        $payment->currency = $currency;
-        $payment->status = $status;
-        $payment->save();
-
-        // Optionally, you can return a response
-        return response()->json(['message' => 'Payment data received and saved successfully']);
-    } else {
-        // Handle the case where the necessary keys are not found
-        return response()->json(['error' => 'Invalid webhook payload'], 400);
-    }
-
-});
+Route::post('/stripe/webhook', [StripeController::class, 'webhook']);
 
 
 
