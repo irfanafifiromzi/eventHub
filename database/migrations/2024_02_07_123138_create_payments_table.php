@@ -16,13 +16,17 @@ class CreatePaymentsTable extends Migration
         Schema::create('payments', function (Blueprint $table) {
             $table->id();
             $table->string('stripe_id');
-            //$table->string('email'); 
+            $table->string('email');
+            $table->foreignId('event_id'); // Event ID as foreign key
+            $table->integer('ticket_quantity'); // Ticket quantity
             $table->float('amount');
             $table->string('currency');
             $table->string('status');
             $table->timestamps();
 
-            //$table->foreign('email')->references('email')->on('users')->onDelete('cascade');
+            // Define foreign key constraints
+            $table->foreign('email')->references('email')->on('users')->onDelete('cascade');
+            $table->foreign('event_id')->references('id')->on('events')->onDelete('cascade');
         });
     }
 

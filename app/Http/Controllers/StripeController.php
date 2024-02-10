@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Http\Controllers;
 
 use App\Models\Payment;
@@ -15,16 +14,19 @@ class StripeController extends Controller
     {
         \Stripe\Stripe::setApiKey(config('stripe.sk'));
         $userEmail = auth()->user()->email ?? null;
+        //dd($request);
 
-        $eventId = $request->get('id');
+        $eventId = $request->get('eventId');
         $eventName = $request->get('eventName');
         $ticketQuantity = $request->get('quantity');
         $eventPrice = $request->get('eventPrice');
         $totalPrice = $eventPrice;
         $total = $totalPrice * 100;
 
-        //dd($userEmail);
+        // Log user's email
+        Log::info('userEmail: ' . $userEmail);
 
+        // Create a session with metadata including the user's email
         $session = \Stripe\Checkout\Session::create([
             'line_items' => [
                 [
@@ -39,71 +41,82 @@ class StripeController extends Controller
                 ],
             ],
             'mode' => 'payment',
-            'success_url' => route('success'),
+            'success_url' => route('success', ['email' => $userEmail]),
             'cancel_url' => route('home'),
-            'metadata' => [
-                'user_email' => $userEmail, // Assuming user is authenticated
-                'event_id' => $eventId, // Assuming event ID is passed in the request
+            'payment_intent_data' => [
+                'receipt_email' => $userEmail, 
+                //'description' => $ticketQuantity,// Specify the email address for receipt
+                'metadata' => [
+                    'event_id' => $eventId,
+                    'quantity' => $ticketQuantity,
+                ],
             ],
         ]);
 
+        // Redirect the user to the session URL
         return redirect()->away($session->url);
     }
 
-    public function success()
+    public function success(Request $request)
     {
-        return "Thanks for your order";
+        // Retrieve user's email from metadata if available
+        $userEmail = $request->get('email');
+
+        // If user email is available, use it to display a personalized success message
+        if ($userEmail) {
+            return "Thanks for your order, $userEmail!";
+        }
+
+        // If user email is not available, display a generic success message
+        return "Thanks for your order!";
     }
 
     public function webhook(Request $request)
     {
         // Log the incoming webhook payload
-        Log::info('Webhook payload: ' . json_encode($request->all()));
-
+        Log::info('Webhook payload: ' . $request->getContent());
+    
+        $payload = json_decode($request->getContent(), true);
+        $sig_header = $request->header('Stripe-Signature');
+        $endpoint_secret = 'whsec_aNN8TaCbsn1DDjQNPcno0XTjaf3zagaq'; // Replace with your actual webhook secret
+    
         try {
-            // Extract necessary data from the webhook payload
-            $payload = json_decode($request->getContent(), true);
-
-            // Check if $payload contains the necessary keys
-            if (isset($payload['data']['object'])) {
-                // Access the nested object containing payment data
-                $paymentData = $payload['data']['object'];
-
-                // Assuming the payment data contains 'id', 'amount', 'currency', and 'status' fields
-                $stripeId = $paymentData['id'] ?? null;
-                $amount = $paymentData['amount'] ?? null;
-                $currency = $paymentData['currency'] ?? null;
-                $status = $paymentData['status'] ?? null;
-
-                //get real amount
-                $realamount = $amount * 0.01;
-
-                $metadata = $paymentData['metadata'] ?? [];
-
-                // Retrieve user_email from metadata
-                $userEmail = $metadata['event_id'] ?? null;
-
-                // Insert the data into the payments table
-                $payment = new Payment();
-                $payment->stripe_id = $stripeId;
-                //$payment->email = $userEmail;
-                $payment->amount = $realamount;
-                $payment->currency = $currency;
-                $payment->status = $status;
-                $payment->save();
-
-                // Optionally, you can return a response
-                return response()->json(['message' => 'Payment data received and saved successfully']);
-            } else {
-                // Handle the case where the necessary keys are not found
-                Log::error('Invalid webhook payload: ' . json_encode($payload));
-                return response()->json(['error' => 'Invalid webhook payload'], 400);
-            }
-        } catch (\Exception $e) {
-            // Log any exceptions that occur during webhook processing
-            Log::error('Exception occurred during webhook processing: ' . $e->getMessage());
-            return response()->json(['error' => 'An error occurred during webhook processing'], 500);
+            $event = Webhook::constructEvent($request->getContent(), $sig_header, $endpoint_secret);
+        } catch (SignatureVerificationException $e) {
+            // Invalid signature
+            return response('Invalid signature', 400);
         }
+    
+        $paymentData = $event['data']['object'];
+    
+        // Assuming the payment data contains 'id', 'amount', 'currency', and 'status' fields
+        $stripeId = $paymentData['id'] ?? null;
+        $amount = $paymentData['amount'] ?? null;
+        $currency = $paymentData['currency'] ?? null;
+        $status = $paymentData['status'] ?? null;
+        $userEmail = $paymentData['receipt_email'] ?? null;
+    
+        // Retrieve metadata from payment intent object
+        $metadata = $paymentData['metadata'] ?? [];
+        $eventId = $metadata['event_id'] ?? null;
+        $ticketQuantity = $metadata['quantity'] ?? null;
+    
+        // Get real amount
+        $realamount = $amount * 0.01;
+    
+        // Insert the data into the payments table
+        $payment = new Payment();
+        $payment->stripe_id = $stripeId;
+        $payment->email = $userEmail;
+        $payment->event_id = $eventId;
+        $payment->ticket_quantity = $ticketQuantity;
+        $payment->amount = $realamount;
+        $payment->currency = $currency;
+        $payment->status = $status;
+        $payment->save();
+    
+        // Optionally, you can return a response
+        return response()->json(['message' => 'Payment data received and saved successfully']);
     }
+    
 }
-

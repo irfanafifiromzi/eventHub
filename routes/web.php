@@ -5,7 +5,6 @@ use App\Http\Controllers\StripeController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\OrganizationController;
 use App\Http\Controllers\AdminController;
-use App\Http\Controllers\StripeWebhookController;
 use App\Models\Payment;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
@@ -64,10 +63,8 @@ Route::get('/artsEvent', function () {
 /*                         Payment                           */
 /********************************************************** */
 
-/*Payment gateway*/
 Route::post('/session', [StripeController::class, 'session'])->name('session')->middleware('auth');
-Route::get('/success', [StripeController::class, 'success'])->name('success');
-
+Route::get('/success', [StripeController::class, 'success'])->name('success'); // Update this line
 Route::post('/stripe/webhook', [StripeController::class, 'webhook']);
 
 
