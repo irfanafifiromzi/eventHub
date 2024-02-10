@@ -42,7 +42,7 @@ class StripeController extends Controller
             ],
             'mode' => 'payment',
             'success_url' => route('success', ['email' => $userEmail]),
-            'cancel_url' => route('home'),
+            'cancel_url' => route('events.show', ['events' => $eventId]),
             'payment_intent_data' => [
                 'receipt_email' => $userEmail, 
                 //'description' => $ticketQuantity,// Specify the email address for receipt
