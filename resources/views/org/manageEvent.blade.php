@@ -24,6 +24,8 @@
         <th scope="col">#</th>
       <th scope="col">Event</th>
       <th scope="col">Date</th>
+      <th scope="col">Price</th>
+      <th scope="col">Capacity</th>
       <th scope="col">Location</th>
       <th scope="col">Status</th>
       <th scope="col"></th>
@@ -34,11 +36,16 @@
             <th scope="row">{{ $index + 1 }}</th>
             <td>{{ $event->eventName }}</td>
             <td>{{ $event->eventStartDate->format('F j, Y') }}</td>
+            <td>RM {{ $event->eventPrice }}</td>
+            <td>{{ $event->eventCapacity }}</td>
             <td>{{ $event->eventLocation }}</td>
             <td>{{ $event->eventStatus }}</td>
             <td>
                 <a href="/getEvent/{{ $event->id }}">
                     <button type="button" class="btn btn-warning mb-1" style="width: 80px;">Edit</button>
+                </a>
+                <a href="/getReport/{{ $event->id }}">
+                    <button type="button" class="btn btn-success mb-1" style="width: 80px;">Report</button>
                 </a>
                     <button type="button" class="btn btn-danger mb-1" data-bs-toggle="modal" data-bs-target="#staticBackdrop" style="width: 80px;">Delete</button>
             </td>

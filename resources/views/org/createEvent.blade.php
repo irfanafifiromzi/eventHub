@@ -29,7 +29,14 @@
 
   <div class="mb-3">
     <label for="eventCategory" class="form-label">Category</label>
-    <input type="text" class="form-control" id="eventCategory" name="eventCategory" required>
+    <select class="form-control" id="eventCategory" name="eventCategory" required>
+      <option value="Music">Music</option>
+      <option value="Technology">Technology</option>
+      <option value="Sports">Sports</option>
+      <option value="Art">Art</option>
+      <option value="Wedding">Wedding</option>
+      <option value="Education">Education</option>
+    </select>
   </div>
 
   <div class="mb-3">

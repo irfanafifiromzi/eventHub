@@ -25,12 +25,15 @@
                 <a class="nav-link" href="/signup">Sign Up</a>
             </li>
             @else
-            <li class="nav-item">
-                <a class="nav-link" href="#">Create an Event</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="#">Likes</a>
-            </li>
+            <div class="navbarTextUp" style="display: flex; justify-content: space-between; margin:12px;">
+
+                            <div class="header-action-icon-2">
+                                <a href="/show2/{{ Auth::user()->email }}">
+                                    <img alt="Favourite" src="{{ asset('img/icons/icon-heart.svg') }}" style="width:20px;">
+                                    <span class="pro-count white">{{ $favoriteCount }}</span>
+                                </a>
+                            </div>
+                        </div>
             <li class="nav-item dropdown">
                 <a class="nav-link" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"><img src="{{ asset('img/user.png') }}" alt="user" width="20"> {{ Auth::user()->email }} <img src="{{ asset('img/down-arrow.png') }}" alt="downarrow" width="20"></a>
                 <ul class="dropdown-menu">

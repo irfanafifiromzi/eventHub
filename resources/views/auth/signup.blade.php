@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -8,27 +9,33 @@
 </head>
 <body>
     <br><br><br>
-    <a href="/" class="title">EventHub</a>
-    <h3>Create an account</h3>
-    <br>
-<form action="/signupUser" method="post">
-@csrf
-<div class="container">
-  <input type="text" placeholder="First name" name="fname" required>
-    <br><br>
-  <input type="text" placeholder="Last name" name="lname" required>
-    <br><br>
-  <input type="email" placeholder="Email address" name="email" required>
-    <br><br>
-  <input type="password" placeholder="Password" name="password" required>
-    <br><br>
-  <button type="submit">Create</button>
-
-</div>
-
-<div class="container">
-    <a href="/login">Log In</a>
-</div>
-</form>
+    <div class="container">
+        <div class="card">
+            <div class="card-body">
+                <a href="/" class="title">EventHub</a>
+                <h3>Create an account</h3>
+                <br>
+                <form action="/signupUser" method="post">
+                    @csrf
+                    <div class="mb-3">
+                        <input type="text" class="form-control" placeholder="First name" name="fname" required>
+                    </div>
+                    <div class="mb-3">
+                        <input type="text" class="form-control" placeholder="Last name" name="lname" required>
+                    </div>
+                    <div class="mb-3">
+                        <input type="email" class="form-control" placeholder="Email address" name="email" required>
+                    </div>
+                    <div class="mb-3">
+                        <input type="password" class="form-control" placeholder="Password" name="password" required>
+                    </div>
+                    <button type="submit" class="btn btn-dark">Create</button>
+                </form>
+                <div class="container">
+                    <a href="/login">Log In</a>
+                </div>
+            </div>
+        </div>
+    </div>
 </body>
 </html>

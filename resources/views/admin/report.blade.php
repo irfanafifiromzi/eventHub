@@ -19,14 +19,14 @@
                     <p>{{ $events->eventEndDate->format('F j, Y') }}, {{ $events->eventEndTime->format('g:i A') }}</p>
             <h5>Location</h5>
                 <p>{{ $events->eventLocation }}</p>
-            {{-- <h5>Organizer</h5>
-                <p>{{ $organizer->f_name }} {{ $organizer->l_name }}
-                <br> Contacts : {{ $organizer->email }}
+             <h5>Organizer</h5>
             <h5>Sales</h5>
-                <p>Total Amount Sold: ${{ $events->sum(function ($event) { return $event->eventPrice * $event->ticketsSold; }) }}</p> --}}
+                <p>Total Ticket Sold: {{ $totalTicketsSold }} Pax</p>
+                <p>Total Sales: RM {{ $totalAmountSold }}</p>
         </div>
     </div>
-    <img class="detailpic" src="{{ asset('img/eventoffuture.jpg') }}" alt="bigpic" style="width: 45%; height: auto;">
+    <!--<img class="detailpic" src="{{ asset('img/eventoffuture.jpg') }}" alt="bigpic" style="width: 45%; height: auto;">-->
+
 </div>
     <br><br>
 

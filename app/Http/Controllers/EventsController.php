@@ -2,11 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use Carbon\Carbon;
 use App\Models\Events;
 use App\Models\User;
 use App\Http\Requests\StoreEventsRequest;
 use App\Http\Requests\UpdateEventsRequest;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use App\Models\Payment;
 
 class EventsController extends Controller
 {
@@ -15,7 +18,14 @@ class EventsController extends Controller
      */
     public function index()
     {
-        $data = Events::all();
+        
+        $currentDate = Carbon::now()->toDateString();
+        $data = DB::table('events')
+            ->whereDate('eventStartDate', '>=', $currentDate)
+            ->take(5) 
+            ->get();
+
+        //dd($data);    
         return view('home', compact('data'));
     }
 
@@ -29,6 +39,17 @@ class EventsController extends Controller
         return view('searchResult', ['results' => $results]);
     }
 
+    public function category($category)
+    {
+        //dd($category);
+        //$eventCategory = Events::where('eventCategory', $category)->first();
+
+        // Perform the search using your model
+        $results = Events::where('eventCategory', 'LIKE', '%' . $category . '%')->get();
+        //dd($results);
+
+        return view('categoryResult', ['results' => $results , 'category' => $category]);
+    }
     /**
      * Show the form for creating a new resource.
      */
@@ -52,8 +73,13 @@ class EventsController extends Controller
     {
         $eventDetails = Events::where('id', $events->id)->first();
         $userDetails = User::where('email', $eventDetails->email)->first();
-        //dd($eventDetails);
-        return view('show', ['events' => $eventDetails], ['organizer' => $userDetails]);
+        $totalTicketsSold = Payment::where('event_id', $events->id)->sum('ticket_quantity');
+        
+        return view('show', [
+            'events' => $eventDetails,
+            'organizer' => $userDetails,
+            'totalTicketsSold' => $totalTicketsSold // Pass totalTicketsSold to the view
+        ]);
     }
     
     /**

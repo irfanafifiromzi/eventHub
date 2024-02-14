@@ -6,6 +6,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Events;
 use App\Models\User;
+use App\Models\Payment;
 use Illuminate\Support\Facades\Auth;
 
 class OrganizationController extends Controller
@@ -15,11 +16,13 @@ class OrganizationController extends Controller
         $this->middleware('auth')->except('login');
     }
 
+    // Home
     public function organization()
     {
         return view('/org/organization');
     }
 
+    // Events
     public function showEvent(Events $events)
     {
         $userEmail = Auth::user()->email;
@@ -60,5 +63,21 @@ class OrganizationController extends Controller
         $data->update($request->all());
         //dd($data);
         return redirect()->route('organization.showEvent')->with('success', 'The event has been successfully updated');
+    }
+
+    //Report
+    public function showReport($id)
+    {
+        $userEmail = Auth::user()->email;
+        $data = Events::find($id);
+        $order = Payment::where('event_id', $id);
+        $totalTicketsSold = Payment::where('event_id', $id)
+        ->sum('ticket_quantity');
+        $totalAmountSold = Payment::where('event_id', $id)
+        ->sum('amount');
+        $netSales = $totalAmountSold * 0.97;
+        $receiptDetails = Payment::where('event_id', $id)->get();
+        //dd($receiptDetails);
+        return view('org.report', compact('data','totalTicketsSold', 'totalAmountSold', 'netSales', 'order', 'receiptDetails'));
     }
 }

@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 use App\Models\Events;
 use App\Models\User;
+use App\Models\Payment;
 use App\Models\Admin;
 use App\Models\Sponsorships;
-
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
@@ -159,12 +161,20 @@ class AdminController extends Controller
         return redirect()->back()->with('status', 'Event status updated successfully');
     }
 
-    public function report($id){
+    public function report($id)
+    {
         $events = Events::find($id);
-
-        return view('report', compact('events'));
+        
+        $totalTicketsSold = Payment::where('event_id', $id)
+                            ->sum('ticket_quantity');
+        
+        $totalAmountSold = Payment::where('event_id', $id)
+                            ->sum('amount');
+        
+        //dd($totalTicketsSold . ' ' . $totalAmountSold . ' ' . $events);
+        return view('admin.report', compact('events', 'totalTicketsSold', 'totalAmountSold'));
     }
-
+    
     /**********************Users*****************************/
     public function userIndex(Request $request){
         $search = $request->input('search');

@@ -7,6 +7,7 @@ use App\Http\Controllers\OrganizationController;
 use App\Http\Controllers\AdminController;
 use App\Models\Payment;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\FavouritesController;
 use Illuminate\Http\Request;
 
 
@@ -42,11 +43,11 @@ Route::get('/search', [EventsController::class, 'search'])->name('search');
 /*Event Description page*/
 Route::get('/events/{events}', [EventsController::class, 'show'])->name('events.show');
 
+/*Event Category*/
+Route::get('/events/category/{category}', [EventsController::class, 'category'])->name('events.category');
+
 /*Log out*/
 Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
-
-/* Liked */
-//Route::post('/like/event/{event}', [EventsController::class, 'likeEvent'])->name('like.event');
 
 Route::get('/musicEvent', function () {
     return view('musicEvent', [
@@ -60,6 +61,22 @@ Route::get('/artsEvent', function () {
 });
 
 /*************************************************************
+/*                         Favourites                           */
+/********************************************************** */
+/* Favourites */
+//Route::post('addToFavourites2', [FavouritesController::class, 'add2'])->name('addToFavourites');
+Route::middleware(['auth'])->group(function () {
+    Route::get('favourites', [FavouritesController::class, 'index']);
+    Route::get('addToFavourites2', [FavouritesController::class, 'add2'])->name('addToFavourites2');
+    Route::get('/removeFavourites/{eventId}', [FavouritesController::class, 'removeFavourites'])->name('removeFavourites');
+    /* show favourites  /show2/"*/
+    Route::get('/show2/{email}', [FavouritesController::class, 'show2'])->name('show2');
+
+});
+
+
+
+/*************************************************************
 /*                         Payment                           */
 /********************************************************** */
 
@@ -68,15 +85,17 @@ Route::get('/success', [StripeController::class, 'success'])->name('success'); /
 Route::post('/stripe/webhook', [StripeController::class, 'webhook']);
 
 
-
 /*************************************************************
 /*                         Organization                     */
 /********************************************************** */
+
+// Navbar (Home, event, report)
 Route::get('/organization', [OrganizationController::class, 'organization'])->name('organizationhome');
 Route::middleware(['auth'])->group(function () {
     Route::get('/organization/manageEvent', [OrganizationController::class, 'showEvent'])->name('organization.showEvent');
 });
 
+//Manage events
 /*Create Event*/
 Route::get('/organization/manageEvent/createEvent', [OrganizationController::class, 'createEventForm'])->name('organization.createEvent');
 Route::middleware(['auth'])->group(function () {
@@ -90,6 +109,9 @@ Route::post('/updateEvent/{id}', [OrganizationController::class, 'updateEvent'])
 /* Delete Event */
 Route::get('/deleteEvent/{id}', [OrganizationController::class, 'deleteEvent'])->name('organization.deleteEvent');
 
+/*Get Report*/
+Route::get('/getReport/{id}', [OrganizationController::class, 'showReport'])->name('organization.showReport');
+//Report
 
 /*****************************************************
                           Admin

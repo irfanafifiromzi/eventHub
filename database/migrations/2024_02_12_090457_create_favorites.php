@@ -11,16 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('addtofavorite', function (Blueprint $table) {
-            $table->unsignedBigInteger('id');
+        Schema::create('favourites', function (Blueprint $table) {
+            $table->id();
             $table->string('email');
+            $table->string('eventId');
             $table->timestamps();
-            // Add other columns as needed
-
-            // Define foreign keys
-            $table->unique(['id', 'email']);
-            $table->foreign('id')->references('id')->on('events');
-            $table->foreign('email')->references('email')->on('users');
         });
     }
 
@@ -29,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('addtofavorite');
+        Schema::dropIfExists('favourites');
     }
 };

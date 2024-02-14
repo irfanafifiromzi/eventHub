@@ -19,7 +19,7 @@
             </li>
             @else
             <li class="nav-item">
-                <a class="nav-link" href="#">Create</a>
+                <a class="nav-link" href="{{ route('organization.createEvent') }}">Create</a>
             </li>
             <li class="nav-item dropdown">
                 <a class="nav-link" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"><img src="{{ asset('img/user.png') }}" alt="user" width="20"> {{ Auth::user()->email }} <img src="{{ asset('img/down-arrow.png') }}" alt="downarrow" width="20"></a>
@@ -38,5 +38,4 @@
  <!-- <a href="#" class="w3-bar-item w3-button"><i class="fa fa-home"></i></a> -->
   <a href="{{ route('organizationhome') }}" class="btn btn-outline-dark">Home</a> 
   <a href="{{ route('organization.showEvent') }}" class="btn btn-outline-dark">Events</a> 
-  <a href="#" class="btn btn-outline-dark">Report</a> 
 </div>

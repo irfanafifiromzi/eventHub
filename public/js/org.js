@@ -9,7 +9,7 @@ $(document).ready(function () {
       console.log('Current href:', href);
 
       // Correct the if condition by removing the extra parenthesis
-      if (('http://127.0.0.1:8000' + path) === href) {
+      if (('http://127.0.0.1:8000' + path) === href || ('http://localhost:8000' + path) === href) {
           $(this).addClass('active');
       }
   });

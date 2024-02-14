@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -8,24 +9,27 @@
 </head>
 <body>
     <br><br><br>
-    <a href="/" class="title">EventHub</a>
-    <h3>Login</h3>
-    <br>
-
-<form action="/loginProcess" method="post">
-@csrf
-<div class="container">
-  <input type="text" placeholder="Email address" name="email" required>
-    <br><br>
-  <input type="password" placeholder="Password" name="password" required>
-    <br><br>
-  <button type="submit">Login</button>
-
-</div>
-
-<div class="container">
-    <a href="/signup">Sign Up</a>
-</div>
-</form>
+    <div class="container">
+        <div class="card">
+            <div class="card-body">
+                <a href="/" class="title">EventHub</a>
+                <h3>Login</h3>
+                <br>
+                <form action="/loginProcess" method="post">
+                    @csrf
+                    <div class="mb-3">
+                        <input type="text" class="form-control" placeholder="Email address" name="email" required>
+                    </div>
+                    <div class="mb-3">
+                        <input type="password" class="form-control" placeholder="Password" name="password" required>
+                    </div>
+                    <button type="submit" class="btn btn-dark">Login</button>
+                </form>
+                <div class="container">
+                    <a href="/signup">Sign Up</a>
+                </div>
+            </div>
+        </div>
+    </div>
 </body>
 </html>

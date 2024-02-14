@@ -11,7 +11,7 @@
     
                 <div class="card">
                     <div class="card-header">
-                        <h4>Add Event
+                        <h4>Add Sponsorship
                             <a href="{{ url('sponsors') }}" class="btn btn-danger float-end">BACK</a>
                         </h4>
                     </div>

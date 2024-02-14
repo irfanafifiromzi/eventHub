@@ -27,5 +27,10 @@ a{
 .title{
     font-size: 2em;
     font-weight: 700;
-    color: rgb(113, 112, 112);
+    color: rgb(0, 0, 0);
+}
+
+h3{
+    color: orange;
+    font-weight: bold;
 }

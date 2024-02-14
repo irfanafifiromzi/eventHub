@@ -24,7 +24,7 @@ class StripeController extends Controller
         $total = $totalPrice * 100;
 
         // Log user's email
-        Log::info('userEmail: ' . $userEmail);
+        //Log::info('userEmail: ' . $userEmail);
 
         // Create a session with metadata including the user's email
         $session = \Stripe\Checkout\Session::create([
@@ -41,11 +41,14 @@ class StripeController extends Controller
                 ],
             ],
             'mode' => 'payment',
-            'success_url' => route('success', ['email' => $userEmail]),
+            'success_url' => route('success', [
+                'eventName' => $eventName,
+                'quantity' => $ticketQuantity,
+                'eventPrice' => $eventPrice
+            ]),
             'cancel_url' => route('events.show', ['events' => $eventId]),
             'payment_intent_data' => [
-                'receipt_email' => $userEmail, 
-                //'description' => $ticketQuantity,// Specify the email address for receipt
+                'receipt_email' => $userEmail, // Specify the email address for receipt
                 'metadata' => [
                     'event_id' => $eventId,
                     'quantity' => $ticketQuantity,
@@ -59,22 +62,21 @@ class StripeController extends Controller
 
     public function success(Request $request)
     {
-        // Retrieve user's email from metadata if available
-        $userEmail = $request->get('email');
-
-        // If user email is available, use it to display a personalized success message
-        if ($userEmail) {
-            return "Thanks for your order, $userEmail!";
-        }
-
-        // If user email is not available, display a generic success message
-        return "Thanks for your order!";
+        //dd($request);
+        // Retrieve data from the request body
+        $userEmail = auth()->user()->email ?? $request->input('email');
+        $eventName = $request->input('eventName');
+        $quantity = $request->input('quantity');
+        $eventPrice = $request->input('eventPrice');
+    
+        // Return the view with the retrieved data
+        return view('stripe.success', compact('userEmail', 'eventName', 'quantity', 'eventPrice'));
     }
 
     public function webhook(Request $request)
     {
         // Log the incoming webhook payload
-        Log::info('Webhook payload: ' . $request->getContent());
+        //Log::info('Webhook payload: ' . $request->getContent());
     
         $payload = json_decode($request->getContent(), true);
         $sig_header = $request->header('Stripe-Signature');

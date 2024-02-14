@@ -1,12 +1,12 @@
 @extends('layouts.adminmain')
 
 @section('container')
-    <h1>Home</h1><br><br>
+    <h1>Admin Home</h1><br><br>
 
     <div class="Requests">
-        <img class="upcomingImage" src="img/event.png" alt="event">
+        <img class="upcomingImage" src="img/admin.jpg" alt="event">
         <br><br>
         <p>There are {{ $count }} pending requests</p>
-        <a href="/requests">View</a>
+        <a href="/requests" class="btn btn-primary">View</a>
     </div>
 @endsection
